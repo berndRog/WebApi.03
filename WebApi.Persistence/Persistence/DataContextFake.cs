@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -11,17 +9,18 @@ using WebApi.Core.DomainModel.Entities;
 
 namespace WebApi.Persistence;
 
-public class DataContextFake: IDataContext {
+internal class DataContextFake: IDataContext {
 
-   private readonly string _filePath = Environment.GetFolderPath(
-         Environment.SpecialFolder.ApplicationData) + $"WebApi.03.json";      
+   // ./Appdata/Roaming
+   private readonly string _filePath = Path.Combine(Environment.GetFolderPath(
+      Environment.SpecialFolder.ApplicationData), $"WebApi.03.json");      
 
    public Dictionary<Guid, Owner>   Owners   { get; }
    public Dictionary<Guid, Account> Accounts { get; }
    
    private class CombinedDictionaries {
-      public Dictionary<Guid, Owner>   Owners   { get; set; } = new();
-      public Dictionary<Guid, Account> Accounts { get; set; } = new();
+      public Dictionary<Guid, Owner>   Owners   { get; init; }
+      public Dictionary<Guid, Account> Accounts { get; init; }
    }
    
    public DataContextFake() {
@@ -52,7 +51,7 @@ public class DataContextFake: IDataContext {
    private JsonSerializerOptions GetJsonSerializerOptions() {
       return new JsonSerializerOptions {
          PropertyNameCaseInsensitive = true,
-//       ReferenceHandler = ReferenceHandler.Preserve,
+         ReferenceHandler = ReferenceHandler.Preserve,
 //       ReferenceHandler = ReferenceHandler.IgnoreCycles,
          WriteIndented = true
       };
@@ -62,8 +61,8 @@ public class DataContextFake: IDataContext {
       try {
          // Combine the dictionaries into one object
          var combinedDictionaries = new {
-            Owners = Owners, 
-            Accounts = Accounts
+            Owners, 
+            Accounts
          };
 
          // Serialize to JSON
@@ -80,5 +79,4 @@ public class DataContextFake: IDataContext {
          return false;
       }
    }
-   
 }

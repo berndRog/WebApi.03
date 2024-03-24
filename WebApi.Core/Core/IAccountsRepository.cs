@@ -11,4 +11,5 @@ public interface IAccountsRepository {
    void Remove(Account account);
 
    IEnumerable<Account> SelectByOwnerId(Guid ownerId);
+   Account FindByIban(string iban);
 }

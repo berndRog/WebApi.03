@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using WebApi.Core;
 using WebApi.Core.DomainModel.Entities;
 
 namespace WebApi.Persistence;
 
-public class OwnersRepositoryFake(
+internal class OwnersRepositoryFake(
    IDataContext dataContext
 ): IOwnersRepository {
    
    public IEnumerable<Owner> Select() {
-      return dataContext.Owners.Values;
+      return dataContext.Owners.Values
+         .ToList();
    }
 
    public Owner? FindById(Guid id) { 
@@ -30,10 +30,11 @@ public class OwnersRepositoryFake(
 
    public void Remove(Owner owner) =>
       dataContext.Owners.Remove(owner.Id);
-   
-   public Owner? FindByName(string name) =>
+
+   public IEnumerable<Owner> SelectByName(string name) =>
       dataContext.Owners.Values
-         .FirstOrDefault(owner => owner.Name == name);
+         .Where(owner => owner.Name.Contains(name))
+         .ToList();
 
    public Owner? FindByEmail(string email) =>
       dataContext.Owners.Values
@@ -41,9 +42,9 @@ public class OwnersRepositoryFake(
 
    public IEnumerable<Owner> SelectByBirthDate(DateTime from, DateTime to) =>
       dataContext.Owners.Values
-         .Where(owner => 
+         .Where(owner =>
             owner.Birthdate >= from &&
-            owner.Birthdate <= to
-         );
+            owner.Birthdate <= to)
+         .ToList();
 
 }

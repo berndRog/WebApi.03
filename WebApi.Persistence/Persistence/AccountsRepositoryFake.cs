@@ -7,12 +7,12 @@ using WebApi.Core.DomainModel.Entities;
 
 [assembly: InternalsVisibleTo("WebApiTest")]
 namespace WebApi.Persistence;
-public class AccountsRepositoryFake(
+internal class AccountsRepositoryFake(
    IDataContext dataContext
 ): IAccountsRepository {
    
    public IEnumerable<Account> Select() {
-      return dataContext.Accounts.Values;
+      return dataContext.Accounts.Values.ToList();
    }
 
    public Account? FindById(Guid id) { 
@@ -31,10 +31,13 @@ public class AccountsRepositoryFake(
    public void Remove(Account account) =>
       dataContext.Accounts.Remove(account.Id);
    
-
    public IEnumerable<Account> SelectByOwnerId(Guid ownerId) =>
       dataContext.Owners.Values
          .Where(o => o.Id == ownerId)
-         .SelectMany(o => o.Accounts);
-   
+         .SelectMany(o => o.Accounts)
+         .ToList();
+
+   public Account? FindByIban(string iban) =>
+      dataContext.Accounts.Values
+         .FirstOrDefault(a => a.Iban == iban);
 }

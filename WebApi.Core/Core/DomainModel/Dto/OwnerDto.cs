@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-namespace WebApi.Core.DomainModel.Entities; 
+namespace WebApi.Core.DomainModel.Dto; 
 public class OwnerDto {
    public Guid     Id       { get; set; } = Guid.Empty;
    public string   Name     { get; set; } = string.Empty;

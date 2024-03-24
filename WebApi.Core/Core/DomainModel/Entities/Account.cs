@@ -1,20 +1,19 @@
 using System;
+using WebApi.DomainModel.NullEntities;
 namespace WebApi.Core.DomainModel.Entities;
 
 public record Account: IEntity {
-   public Guid    Id       { get; set; } = Guid.Empty;
-   public string  Iban     { get; set; } = string.Empty;
-   public double  Balance  { get; set; } = 0;
+   public Guid    Id       { get; init; } = Guid.Empty;
+   public string  Iban     { get; init; } = string.Empty;
+   public double  Balance  { get; private set; } = 0;
    
    // Navigation property
-   public Owner Owner   { get; set; } = null!;
-   public Guid  OwnerId { get; set; } = Guid.Empty;
+   public Owner Owner   { get; set; } = NullOwner.Instance;
+   public Guid  OwnerId { get; set; } = NullOwner.Instance.Id;
    
    #region ctor
-   public Account (Account source) {
-      Id = source.Id;
-      Iban = source.Iban;
-      Balance = source.Balance;
+   public Account() {
+      Id = Guid.NewGuid();
    }
    #endregion
    

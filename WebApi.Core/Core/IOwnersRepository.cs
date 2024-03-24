@@ -10,7 +10,7 @@ public interface IOwnersRepository {
    void Update(Owner owner);
    void Remove(Owner owner);
 
-   Owner? FindByName(string name);
+   IEnumerable<Owner> SelectByName(string name);
    Owner? FindByEmail(string email);
    IEnumerable<Owner> SelectByBirthDate(DateTime from, DateTime to);
 }

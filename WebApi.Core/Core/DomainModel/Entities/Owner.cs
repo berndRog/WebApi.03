@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 namespace WebApi.Core.DomainModel.Entities; 
 
-public record Owner: IEntity {
+public class Owner: IEntity {
+   
    #region properties
-   public Guid     Id       { get; init;        } = Guid.Empty;
-   public string   Name     { get; private set; } = string.Empty;
-   public DateTime Birthdate{ get; init;        } = DateTime.UtcNow;
-   public string   Email    { get; private set; } = string.Empty;
-
+   public Guid Id { get; init; } = Guid.NewGuid();
+   public string   Name     { get; set; } = string.Empty;
+   public DateTime Birthdate{ get; set; } = DateTime.UtcNow;
+   public string   Email    { get; set; } = string.Empty;
+   
    // Navigation property
    // One-to-many relationship Owner -> Account
    public ICollection<Account> Accounts { get; set; } = new List<Account>();
    #endregion
    
    #region ctor
-   public Owner() {
-      Id = Guid.NewGuid();
-   }
+   public Owner() {}
    #endregion
    
    #region methods

@@ -9,20 +9,20 @@ using WebApi.Core.DomainModel.Entities;
 
 namespace WebApi.Controllers; 
 
-[ApiController]
 [Route("banking")]
-internal class AccountsController(
+[ApiController]
+public class AccountsController(
    IOwnersRepository ownersRepository,
    IAccountsRepository accountsRepository,
    IDataContext dataContext,
-   IMapperBase mapper,
+   IMapper mapper,
    ILogger<AccountsController> logger
 ) : ControllerBase {
    
    // Get all accounts of a given owner as Dto
    // http://localhost:5010/banking/owners/{ownerId:Guid}/accounts
    [HttpGet("owners/{ownerId:Guid}/accounts")]
-   public ActionResult<IEnumerable<Account>> GetAccountsByOwner(
+   public ActionResult<IEnumerable<AccountDto>> GetAccountsByOwner(
       Guid ownerId
    ) {
       logger.LogDebug("GetAccountsByOwner ownerId={ownerId}", ownerId);
@@ -52,9 +52,11 @@ internal class AccountsController(
    }
 
    // Get account by IBAN as Dto
-   // http://localhost:5010/banking/accounts/{iban}
-   [HttpGet("accounts/{iban}")]
-   public ActionResult<AccountDto> GetAccountByIban(string iban) {
+   // http://localhost:5100/banking/accounts/iban?iban={iban}
+   [HttpGet("accounts/iban")]
+   public ActionResult<AccountDto> GetAccountByIban(
+      [FromQuery] string iban
+   ) {
       logger.LogDebug("GetAccountByIban iban={iban}", iban);
       
       switch (accountsRepository.FindByIban(iban)) {
@@ -66,7 +68,7 @@ internal class AccountsController(
    }
    
    // Create a new account for a given owner
-   // http://localhost:5010/banking/owner/{ownerId}/accounts
+   // http://localhost:5100/banking/owners/{ownerId}/accounts
    [HttpPost("owners/{ownerId:Guid}/accounts")]
    public ActionResult<AccountDto> CreateAccount(
       [FromRoute] Guid ownerId,
@@ -104,7 +106,7 @@ internal class AccountsController(
    }
    
    // Delete an account for a given owner
-   // http://localhost:5100/banking/owner/{ownerId}/accounts
+   // http://localhost:5100/banking/owners/{ownerId}/accounts
    [HttpDelete("owners/{ownerId:Guid}/accounts/{id}")]
    public IActionResult DeleteAccount(
       [FromRoute] Guid ownerId,
@@ -117,10 +119,6 @@ internal class AccountsController(
       if(account == null)
          return NotFound($"UpdateAccount: Account not found.");
 
-      // remove the account from the owners account list is not necessary,
-      // there is no datafield in the dabase referencing the account
-      // i.e. the foreign key is the ownerId in the account table
-      
       // save to repository and write to database 
       accountsRepository.Remove(account);
       dataContext.SaveAllChanges();

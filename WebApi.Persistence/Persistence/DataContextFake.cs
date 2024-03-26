@@ -15,12 +15,12 @@ internal class DataContextFake: IDataContext {
    private readonly string _filePath = Path.Combine(Environment.GetFolderPath(
       Environment.SpecialFolder.ApplicationData), $"WebApi.03.json");      
 
-   public Dictionary<Guid, Owner>   Owners   { get; }
-   public Dictionary<Guid, Account> Accounts { get; }
+   public Dictionary<Guid, Owner>   Owners   { get; } = new();
+   public Dictionary<Guid, Account> Accounts { get; } = new();
    
    private class CombinedDictionaries {
-      public Dictionary<Guid, Owner>   Owners   { get; init; }
-      public Dictionary<Guid, Account> Accounts { get; init; }
+      public Dictionary<Guid, Owner> Owners { get; init; } = new();
+      public Dictionary<Guid, Account> Accounts { get; init; } = new();
    }
    
    public DataContextFake() {

@@ -2,8 +2,7 @@
 using WebApi.Core.DomainModel.Dto;
 using WebApi.Core.DomainModel.Entities;
 
-namespace WebApi.Core.Mapping;
-internal class MappingProfile : Profile {
+public class MappingProfile : Profile {
    public MappingProfile() {
       //        Source Destination
       CreateMap<Owner, OwnerDto>();

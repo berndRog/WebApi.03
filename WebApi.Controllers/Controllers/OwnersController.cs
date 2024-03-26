@@ -14,7 +14,7 @@ namespace WebApi.Controllers;
 [ApiController]
 public class OwnersController(
    // Dependency injection
-   IOwnersRepository ownersRepository,
+   IOwnersRepository repository,
    IDataContext dataContext,
    IMapper mapper,
    ILogger<OwnersController> logger
@@ -25,8 +25,12 @@ public class OwnersController(
    [HttpGet("")]
    public ActionResult<IEnumerable<OwnerDto>> Get() {
       logger.LogDebug("GetOwners()");
-      var owners = ownersRepository.Select();
-      var ownerDtos = mapper.Map<IEnumerable<Owner>, IEnumerable<OwnerDto>>(owners);
+      
+      // get all owners
+      var owners = repository.Select();
+      
+      // return owners as Dtos
+      var ownerDtos = mapper.Map<IEnumerable<OwnerDto>>(owners);
       return Ok(ownerDtos);  
    }
    
@@ -37,11 +41,14 @@ public class OwnersController(
       [FromRoute] Guid id
    ) {
       logger.LogDebug("GetOwnerById() id={id}", id.As8());
-      switch (ownersRepository.FindById(id)) {
+      
+      switch (repository.FindById(id)) {
+         // return owner as Dto
          case Owner owner: 
-            return Ok(mapper.Map<Owner,OwnerDto>(owner));
+            return Ok(mapper.Map<OwnerDto>(owner));
+         // return Not Found
          case null:        
-            return NotFound($"Owner with given Id not found");
+            return NotFound("Owner with given Id not found");
       }
    }
 
@@ -52,23 +59,30 @@ public class OwnersController(
       [FromQuery] string name
    ) {
       logger.LogDebug("GetOwnersByName() name={name}", name);
-      switch (ownersRepository.SelectByName(name)) {
+      
+      switch (repository.SelectByName(name)) {
+         // return owners as Dtos
          case IEnumerable<Owner> owners: 
-            return Ok(mapper.Map<IEnumerable<Owner>, IEnumerable<OwnerDto>>(owners));
+            return Ok(mapper.Map<IEnumerable<OwnerDto>>(owners));
+         // return Not Found
          case null: 
-            return NotFound($"Owners with given name not found");
+            return NotFound("Owners with given name not found");
       }
    }
 
    // Get owner by email as Dto
    // http://localhost:5100/banking/owners/email
-   [HttpGet("owners/email")]
+   [HttpGet("email")]
    public ActionResult<OwnerDto?> GetOwnerByEmail(
       [FromQuery] string email
    ) {
-      switch (ownersRepository.FindByEmail(email)) {
-         case Owner owner: return Ok(mapper.Map<Owner,OwnerDto>(owner));
-         case null:        return NotFound($"Owner with given email not found");
+      switch (repository.FindByEmail(email)) {
+         // return owner as Dto
+         case Owner owner: 
+            return Ok(mapper.Map<OwnerDto>(owner));
+         // return Not Found
+         case null:        
+            return NotFound("Owner with given email not found");
       }
    }
 
@@ -90,9 +104,11 @@ public class OwnersController(
       if(errorTo) 
          return BadRequest($"GetOwnerByBirthdate: Invalid date 'to': {to}");
 
-      var owners = ownersRepository.SelectByBirthDate(dateFrom, dateTo);   
+      // get owners by birthdate
+      var owners = repository.SelectByBirthDate(dateFrom, dateTo);   
       
-      return Ok(mapper.Map<IEnumerable<Owner>, IEnumerable<OwnerDto>>(owners));
+      // return owners as Dtos
+      return Ok(mapper.Map<IEnumerable<OwnerDto>>(owners));
    }
    
    // Convert string in German format dd.MM.yyyy to DateTime
@@ -108,75 +124,79 @@ public class OwnersController(
    // Create a new owner
    // http://localhost:5100/banking/owners
    [HttpPost("")]
-   public ActionResult<Owner> CreateOwner(
+   public ActionResult<OwnerDto> CreateOwner(
       [FromBody] OwnerDto ownerDto
    ) {
       logger.LogDebug("CreateOwner() ownerDto={ownerDto}", ownerDto.Name);
       
+      // map Dto to DomainModel.Entity
       var owner = mapper.Map<OwnerDto, Owner>(ownerDto);
       
       // check if owner with given Id already exists   
-      if(ownersRepository.FindById(owner.Id) != null) 
-         return BadRequest($"CreateOwner: Owner with the given id already exists");
+      if(repository.FindById(owner.Id) != null) 
+         return Conflict($"CreateOwner: Owner with the given id already exists");
       
       // add owner to repository
-      ownersRepository.Add(owner); 
+      repository.Add(owner); 
       // save to datastore
       dataContext.SaveAllChanges();
       
-      // return created owner      
+      // return created owner as Dto
       var uri = new Uri($"{Request.Path}/{owner.Id}", UriKind.Relative);
-      return Created(uri: uri, value: owner);     
+      return Created(uri, mapper.Map<OwnerDto>(owner));     
    }
    
    // Update owner
    // http://localhost:5100/banking/owners/{id}
-   [HttpPut("owners/{id:Guid}")] 
-   public ActionResult<Owner> UpdateOwner(
+   [HttpPut("{id:Guid}")] 
+   public ActionResult<OwnerDto> UpdateOwner(
       [FromRoute] Guid id,
       [FromBody]  OwnerDto updOwnerDto
    ) {
       
       logger.LogDebug("UpdateOwner() id={id} updOwnerDto={updOwnerDto}", id.As8(), updOwnerDto.Name);
       
+      // map Dto to DomainModel.Entity
       var updOwner = mapper.Map<OwnerDto, Owner>(updOwnerDto);
 
       // check if Id in the route and body match
       if(id != updOwner.Id) 
-         return BadRequest($"UpdateOwner: Id in the route and body do not match.");
+         return BadRequest("UpdateOwner: Id in the route and body do not match.");
       
       // check if owner with given Id exists
-      Owner? owner = ownersRepository.FindById(id);
+      Owner? owner = repository.FindById(id);
       if (owner == null)
-         return NotFound($"UpdateOwner: Owner with given id not found.");
+         return NotFound("UpdateOwner: Owner with given id not found.");
 
       // Update person
       owner.Update(updOwner.Name, updOwner.Email);
       
       // save to repository and write to database 
-      ownersRepository.Update(owner);
+      repository.Update(owner);
       dataContext.SaveAllChanges();
 
-      return Ok(owner); 
+      // return updated owner as Dto
+      return Ok(mapper.Map<OwnerDto>(owner));
    }
    
    // Delete owner
    // http://localhost:5100/banking/owners/{id}
-   [HttpDelete("owners/{id:Guid}")] 
+   [HttpDelete("{id:Guid}")] 
    public ActionResult<Owner> DeleteOwner(
       [FromRoute] Guid id
    ) {
       logger.LogDebug("DeleteOwner {id}", id.As8());
       
       // check if owner with given Id exists
-      Owner? owner = ownersRepository.FindById(id);
+      Owner? owner = repository.FindById(id);
       if (owner == null)
-         return NotFound($"DeleteOwner: Owner with given id not found.");
+         return NotFound("DeleteOwner: Owner with given id not found.");
 
       // delete in repository and write to database 
-      ownersRepository.Remove(owner);
+      repository.Remove(owner);
       dataContext.SaveAllChanges();
 
-      return Ok(owner); 
+      // return NoContent
+      return NoContent(); 
    }
 }

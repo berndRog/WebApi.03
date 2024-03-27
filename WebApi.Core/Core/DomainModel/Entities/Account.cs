@@ -1,6 +1,6 @@
 using System;
 using System.Text.Json.Serialization;
-using WebApi.DomainModel.NullEntities;
+using WebApi.Core.DomainModel.NullEntities;
 namespace WebApi.Core.DomainModel.Entities;
 
 public class Account: IEntity {

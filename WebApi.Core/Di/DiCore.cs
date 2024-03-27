@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi.Core.DomainModel.Dto;
 using WebApi.Core.DomainModel.Entities;
 using WebApi.Core.Mapping;
 namespace WebApi.Di; 

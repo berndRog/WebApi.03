@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using WebApi.Core;
-using WebApi.Core.DomainModel.Dto;
 using WebApi.Core.DomainModel.Entities;
+using WebApi.Core.Dto;
 using WebApi.Core.Misc;
 
 namespace WebApi.Controllers; 

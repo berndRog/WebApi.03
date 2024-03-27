@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Text.Json.Serialization;
-namespace WebApi.Core.DomainModel.Dto; 
+namespace WebApi.Core.Dto; 
 
 // immutable data class
 public record OwnerDto(

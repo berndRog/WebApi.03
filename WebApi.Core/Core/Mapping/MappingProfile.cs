@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using WebApi.Core.DomainModel.Dto;
 using WebApi.Core.DomainModel.Entities;
+using WebApi.Core.Dto;
 
 public class MappingProfile : Profile {
    public MappingProfile() {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using WebApi.Core.DomainModel.Dto;
 using WebApi.Core.DomainModel.Entities;
+using WebApi.Core.Dto;
 namespace WebApi.Core.Mapping;
 
 public static class Mappings {

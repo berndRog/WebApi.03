@@ -1,6 +1,6 @@
 ﻿using System;
 using WebApi.Core.DomainModel.Entities;
-namespace WebApi.DomainModel.NullEntities;
+namespace WebApi.Core.DomainModel.NullEntities;
 // https://jonskeet.uk/csharp/singleton.html
 
 public sealed class NullOwner: Owner {  

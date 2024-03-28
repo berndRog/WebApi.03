@@ -3,10 +3,9 @@ using System.Text.Json.Serialization;
 using WebApi.Core.DomainModel.NullEntities;
 namespace WebApi.Core.DomainModel.Entities;
 
-public class Account: IEntity {
-   public Guid    Id       { get; init; } = Guid.Empty;
+public class Account: AEntity {
+   public override Guid Id { get; init; } = Guid.Empty;
    public string  Iban     { get; init; } = string.Empty;
-   [JsonInclude]  // ignore private set when serializing
    public double  Balance  { get;  set; } = 0;
    
    // Navigation property

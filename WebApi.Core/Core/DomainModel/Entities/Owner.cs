@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 namespace WebApi.Core.DomainModel.Entities; 
 
-public class Owner: IEntity {
+public class Owner: AEntity {
    
    #region properties
-   public Guid Id { get; init; } = Guid.NewGuid();
+   public override Guid Id  { get; init;} = Guid.NewGuid();
    public string   Name     { get; set; } = string.Empty;
-   public DateTime Birthdate{ get; init; } = DateTime.UtcNow;
+   public DateTime Birthdate{ get; init;} = DateTime.UtcNow;
    public string   Email    { get; set; } = string.Empty;
    
    // Navigation property
@@ -17,7 +17,7 @@ public class Owner: IEntity {
    #endregion
    
    #region ctor
-   public Owner() {}
+   public Owner(): base() {}
    #endregion
    
    #region methods

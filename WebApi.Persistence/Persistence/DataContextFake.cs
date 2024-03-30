@@ -13,7 +13,7 @@ internal class DataContextFake: IDataContext {
 
    // Win:  ~/Appdata/Roaming   Mac: ~/Library/Application Support
    private readonly string _filePath = Path.Combine(Environment.GetFolderPath(
-      Environment.SpecialFolder.ApplicationData), $"WebApi03.json");      
+      Environment.SpecialFolder.MyDocuments), $"WebApi03.json");      
 
    public Dictionary<Guid, Owner>   Owners   { get; } = new();
    public Dictionary<Guid, Account> Accounts { get; } = new();

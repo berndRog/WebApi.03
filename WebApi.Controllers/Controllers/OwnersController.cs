@@ -142,6 +142,9 @@ public class OwnersController(
       dataContext.SaveAllChanges();
       
       // return created owner as Dto
+      string requestPath = null!;
+      if(Request == null) requestPath = $"http://localhost:5100/banking/owners";
+      else                requestPath = Request.Path;
       var uri = new Uri($"{Request.Path}/{owner.Id}", UriKind.Relative);
       return Created(uri, mapper.Map<OwnerDto>(owner));     
    }

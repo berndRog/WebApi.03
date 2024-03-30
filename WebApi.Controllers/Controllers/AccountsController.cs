@@ -20,7 +20,7 @@ public class AccountsController(
 ) : ControllerBase {
    
    // Get all accounts of a given owner as Dto
-   // http://localhost:5010/banking/owners/{ownerId:Guid}/accounts
+   // http://localhost:5100/banking/owners/{ownerId:Guid}/accounts
    [HttpGet("owners/{ownerId:Guid}/accounts")]
    public ActionResult<IEnumerable<AccountDto>> GetAccountsByOwner(
       Guid ownerId
@@ -36,8 +36,8 @@ public class AccountsController(
       return Ok(accountDtos);  
    }
 
-   // Get account by Id
-   // http://localhost:5010/banking/accounts/{id}
+   // Get account by Id as Dto
+   // http://localhost:5100/banking/accounts/{id}
    [HttpGet("accounts/{id}")]
    public ActionResult<AccountDto> GetAccountById(Guid id) {
       logger.LogDebug("GetAccountById id={id}", id);
@@ -83,11 +83,7 @@ public class AccountsController(
       Owner? owner = ownersRepository.FindById(ownerId);
       if (owner == null)
          return BadRequest("Bad request: ownerId does't exists.");
-   
-      // check if ownerId from route matches ownerId in account
-      if (account.OwnerId != ownerId)
-         return BadRequest("Bad request: ownerId from route does not match ownerId in account.");
-      
+
       // check if account with given Id already exists   
       if(accountsRepository.FindById(account.Id) != null) 
          return Conflict($"Account with given Id already exists");
@@ -101,7 +97,10 @@ public class AccountsController(
       dataContext.SaveAllChanges();
       
       // return created account as Dto      
-      Uri uri = new Uri($"{Request.Path}/accounts/{account.Id}", UriKind.Relative);
+      string requestPath = null!;
+      if(Request == null) requestPath = $"http://localhost:5100/banking/owners/{ownerId}";
+      else                requestPath = Request.Path;
+      var uri = new Uri($"{requestPath}/accounts/{account.Id}", UriKind.Relative);
       return Created(uri, mapper.Map<AccountDto>(account));     
    }
    

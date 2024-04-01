@@ -22,7 +22,14 @@ public static class Mappings {
          Email = ownerDto.Email,
          Accounts = new List<Account>()
       };
-
+   
+   public static IEnumerable<OwnerDto> ToOwnerDtos(this IEnumerable<Owner> owners) =>
+      //    owners.Select(o => o.ToOwnerDto());
+      owners.Select(ToOwnerDto);
+   
+   public static IEnumerable<Owner> ToOwner(this IEnumerable<OwnerDto> ownerDtos) => 
+      //    ownerDtos.Select(o => o.ToOwner());
+      ownerDtos.Select(ToOwner);
 
    public static AccountDto ToAccountDto(this Account account) =>
       new AccountDto(
@@ -41,7 +48,4 @@ public static class Mappings {
       };
 
 
-   public static IEnumerable<OwnerDto> ToOwnerDtos(this IEnumerable<Owner> owners) =>
-//    owners.Select(o => o.ToOwnerDto());
-      owners.Select(ToOwnerDto);
 }

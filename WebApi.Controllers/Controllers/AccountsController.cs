@@ -57,7 +57,7 @@ public class AccountsController(
       logger.LogDebug("GetAccountByIban iban={iban}", iban);
 
       return accountsRepository.FindByIban(iban) switch {
-         { } account => Ok(mapper.Map<Account, AccountDto>(account)),
+         { } account => Ok(mapper.Map<AccountDto>(account)),
          null => NotFound("Account with given Id not found")
       };
    }

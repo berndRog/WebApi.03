@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +10,7 @@ public class Program {
    static void Main(string[] args) {
 
       // WebApplication Builder Pattern
-      WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+      var builder = WebApplication.CreateBuilder(args);
       
       // Configure logging
       // ---------------------------------------------------------------------
@@ -43,10 +42,10 @@ public class Program {
       
       // Build the WebApplication
       // -------------------------------------------------------------------
-      WebApplication app = builder.Build();
+      var app = builder.Build();
 
-      var mapper = app.Services.GetService<IMapper>();
-      var logger = app.Services.GetService<ILogger<Program>>();
+   // var mapper = app.Services.GetService<IMapper>();
+   // var logger = app.Services.GetService<ILogger<Program>>();
       
       // use http logging
       app.UseHttpLogging();

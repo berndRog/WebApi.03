@@ -5,7 +5,7 @@ using WebApi.Core.Mapping;
 namespace WebApi.Di; 
 
 public static class DiCore {
-   public static IServiceCollection AddCore(
+   public static void AddCore(
       this IServiceCollection services
    ) {
       // add this assemlby to scan for profiles
@@ -14,7 +14,5 @@ public static class DiCore {
       var mapperConfig = new MapperConfiguration(config => {
          config.AddProfile(new MappingProfile());
       });
-      
-      return services;
    }
 }

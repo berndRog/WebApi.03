@@ -5,7 +5,7 @@ namespace WebApi.Core.DomainModel.NullEntities;
 
 public sealed class NullOwner: Owner {  
    // Singleton Skeet Version 4
-   private static readonly NullOwner instance = new NullOwner();
+   private static readonly NullOwner instance = new ();
    public static NullOwner Instance { get => instance; }
    
    static NullOwner() { }

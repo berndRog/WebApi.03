@@ -13,7 +13,7 @@ internal class DataContextFake: IDataContext {
 
    // Win:  ~/Appdata/Roaming   Mac: ~/Library/Application Support
    private readonly string _filePath = Path.Combine(Environment.GetFolderPath(
-      Environment.SpecialFolder.MyDocuments), $"WebApi03.json");      
+      Environment.SpecialFolder.MyDocuments), "WebApi03.json");      
 
    public Dictionary<Guid, Owner>   Owners   { get; } = new();
    public Dictionary<Guid, Account> Accounts { get; } = new();
@@ -30,7 +30,7 @@ internal class DataContextFake: IDataContext {
             Accounts = new Dictionary<Guid, Account>();
          } else {
             // Read the JSON file
-            string json = File.ReadAllText(_filePath, Encoding.UTF8);
+            var json = File.ReadAllText(_filePath, Encoding.UTF8);
             
             // Deserialize the JSON string back into the CombinedDictionaries class
             var combinedDictionaries = JsonSerializer.Deserialize<CombinedDictionaries>(
@@ -66,7 +66,7 @@ internal class DataContextFake: IDataContext {
          };
 
          // Serialize to JSON
-         string json = JsonSerializer.Serialize(
+         var json = JsonSerializer.Serialize(
             combinedDictionaries, 
             GetJsonSerializerOptions() 
          );

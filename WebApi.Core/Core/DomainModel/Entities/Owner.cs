@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 namespace WebApi.Core.DomainModel.Entities; 
 
 public class Owner: AEntity {
@@ -14,10 +13,6 @@ public class Owner: AEntity {
    // Navigation property
    // One-to-many relationship Owner -> Account
    public ICollection<Account> Accounts { get; set; } = new List<Account>();
-   #endregion
-   
-   #region ctor
-   public Owner(): base() {}
    #endregion
    
    #region methods

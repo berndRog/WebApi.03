@@ -21,55 +21,50 @@ public class AccountsController(
    
    // Get all accounts of a given owner as Dto
    // http://localhost:5100/banking/owners/{ownerId:Guid}/accounts
-   [HttpGet("owners/{ownerId:Guid}/accounts")]
+   [HttpGet("owners/{ownerId:guid}/accounts")]
    public ActionResult<IEnumerable<AccountDto>> GetAccountsByOwner(
       Guid ownerId
    ) {
       logger.LogDebug("GetAccountsByOwner ownerId={ownerId}", ownerId);
       
       // get all accounts of a given owner
-      IEnumerable<Account> accounts = accountsRepository.SelectByOwnerId(ownerId);
+      var accounts = accountsRepository.SelectByOwnerId(ownerId);
       
       // map DomainModel to Dto
-      IEnumerable<AccountDto>? accountDtos = 
-         mapper.Map<IEnumerable<AccountDto>>(accounts);
+      var accountDtos = mapper.Map<IEnumerable<AccountDto>>(accounts);
       return Ok(accountDtos);  
    }
 
    // Get account by Id as Dto
    // http://localhost:5100/banking/accounts/{id}
-   [HttpGet("accounts/{id}")]
+   [HttpGet("accounts/{id:guid}")]
    public ActionResult<AccountDto> GetAccountById(Guid id) {
       logger.LogDebug("GetAccountById id={id}", id);
-      
-      switch (accountsRepository.FindById(id)) {
+
+      return accountsRepository.FindById(id) switch {
          // map DomainModel to Dto      
-         case Account account: 
-            return Ok(mapper.Map<AccountDto>(account));
-         case null:            
-            return NotFound($"Account with given Id not found");
-      }
+         { } account => Ok(mapper.Map<AccountDto>(account)),
+         null => NotFound("Account with given Id not found")
+      };
    }
 
    // Get account by IBAN as Dto
-   // http://localhost:5100/banking/accounts/iban?iban={iban}
+   // http://localhost:5100/banking/accounts/iban?iban=abc
    [HttpGet("accounts/iban")]
    public ActionResult<AccountDto> GetAccountByIban(
       [FromQuery] string iban
    ) {
       logger.LogDebug("GetAccountByIban iban={iban}", iban);
-      
-      switch (accountsRepository.FindByIban(iban)) {
-         case Account account: 
-            return Ok(mapper.Map<Account, AccountDto>(account));
-         case null:            
-            return NotFound($"Account with given Id not found");
-      }
+
+      return accountsRepository.FindByIban(iban) switch {
+         { } account => Ok(mapper.Map<Account, AccountDto>(account)),
+         null => NotFound("Account with given Id not found")
+      };
    }
    
    // Create a new account for a given owner
    // http://localhost:5100/banking/owners/{ownerId}/accounts
-   [HttpPost("owners/{ownerId:Guid}/accounts")]
+   [HttpPost("owners/{ownerId:guid}/accounts")]
    public ActionResult<AccountDto> CreateAccount(
       [FromRoute] Guid ownerId,
       [FromBody]  AccountDto accountDto
@@ -77,16 +72,16 @@ public class AccountsController(
       logger.LogDebug("CreateAccount iban={iban}", accountDto.Iban);
       
       // map Dto to DomainModel
-      Account account = mapper.Map<Account>(accountDto);
+      var account = mapper.Map<Account>(accountDto);
       
       // check if ownerId exists
-      Owner? owner = ownersRepository.FindById(ownerId);
+      var owner = ownersRepository.FindById(ownerId);
       if (owner == null)
          return BadRequest("Bad request: ownerId does't exists.");
 
       // check if account with given Id already exists   
       if(accountsRepository.FindById(account.Id) != null) 
-         return Conflict($"Account with given Id already exists");
+         return Conflict("Account with given Id already exists");
       
       // update owner in DomainModel
       owner.Add(account);
@@ -105,8 +100,8 @@ public class AccountsController(
    }
    
    // Delete an account for a given owner
-   // http://localhost:5100/banking/owners/{ownerId}/accounts
-   [HttpDelete("owners/{ownerId:Guid}/accounts/{id}")]
+   // http://localhost:5100/banking/owners/{ownerId}/accounts/{id}
+   [HttpDelete("owners/{ownerId:guid}/accounts/{id:guid}")]
    public IActionResult DeleteAccount(
       [FromRoute] Guid ownerId,
       [FromRoute] Guid id
@@ -114,9 +109,9 @@ public class AccountsController(
       logger.LogDebug("DeleteAccount ownerId={ownerId} id={id}", ownerId, id);
       
       // check if account with given Id already exists   
-      Account? account = accountsRepository.FindById(id); 
+      var account = accountsRepository.FindById(id); 
       if(account == null)
-         return NotFound($"UpdateAccount: Account not found.");
+         return NotFound("UpdateAccount: Account not found.");
 
       // save to repository and write to database 
       accountsRepository.Remove(account);

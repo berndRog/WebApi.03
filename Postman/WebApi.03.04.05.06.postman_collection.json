@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "da9fe598-aa3d-471e-92c5-fa4ba4064568",
-		"name": "WebApi.03.CleanASP",
+		"_postman_id": "3a8e6e02-9852-440f-978b-462c1d3872b9",
+		"name": "WebApi.03.04.05.06",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "4920194",
-		"_collection_link": "https://galactic-spaceship-458056.postman.co/workspace/WebApp%26WebApi~53c2bb7c-a5c6-40cb-ac70-8c5662133c96/collection/4920194-da9fe598-aa3d-471e-92c5-fa4ba4064568?action=share&source=collection_link&creator=4920194"
+		"_collection_link": "https://galactic-spaceship-458056.postman.co/workspace/WebApp%26WebApi~53c2bb7c-a5c6-40cb-ac70-8c5662133c96/collection/4920194-3a8e6e02-9852-440f-978b-462c1d3872b9?action=share&source=collection_link&creator=4920194"
 	},
 	"item": [
 		{
@@ -31,7 +31,7 @@
 					"response": []
 				},
 				{
-					"name": "Get owners filter name",
+					"name": "Get owners find name",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -89,7 +89,7 @@
 					"response": []
 				},
 				{
-					"name": "Get owners filter email",
+					"name": "Get owners find email",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -633,6 +633,27 @@
 					"response": []
 				},
 				{
+					"name": "Get account5",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5100/banking/accounts/05000000-0000-0000-0000-000000000000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"banking",
+								"accounts",
+								"05000000-0000-0000-0000-000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get accounts for owner1",
 					"request": {
 						"method": "GET",
@@ -708,7 +729,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"01000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE10 1000\",\r\n  \"balance\": 2100,\r\n  \"ownerId\":\"10000000-0000-0000-0000-000000000000\"\r\n}",
+							"raw": "{\r\n  \"id\": \"01000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE101000\",\r\n  \"balance\": 2100\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -745,7 +766,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"02000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE10 2000\",\r\n  \"balance\": 2000,\r\n  \"ownerId\":\"10000000-0000-0000-0000-000000000000\"\r\n}",
+							"raw": "{\r\n  \"id\": \"02000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE102000\",\r\n  \"balance\": 2000,\r\n  \"ownerId\":\"10000000-0000-0000-0000-000000000000\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -776,7 +797,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"03000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE20 1000\",\r\n  \"balance\": 3000,\r\n  \"ownerId\":\"20000000-0000-0000-0000-000000000000\"\r\n}",
+							"raw": "{\r\n  \"id\": \"03000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE201000\",\r\n  \"balance\": 3000,\r\n  \"ownerId\":\"20000000-0000-0000-0000-000000000000\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -807,7 +828,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"04000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE30 1000\",\r\n  \"balance\": 2500,\r\n  \"ownerId\":\"30000000-0000-0000-0000-000000000000\"\r\n}",
+							"raw": "{\r\n  \"id\": \"04000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE301000\",\r\n  \"balance\": 2500,\r\n  \"ownerId\":\"30000000-0000-0000-0000-000000000000\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -832,13 +853,13 @@
 					"response": []
 				},
 				{
-					"name": "Post account5 (owner4)",
+					"name": "Post account5 (owner4) create Iban",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"05000000-0000-0000-0000-000000000000\",\r\n  \"iban\": \"DE40 1000\",\r\n  \"balance\": 2500,\r\n  \"ownerId\":\"40000000-0000-0000-0000-000000000000\"\r\n}",
+							"raw": "{\r\n  \"id\": \"05000000-0000-0000-0000-000000000000\",\r\n  \"balance\": 2500,\r\n  \"iban\":\"\",\r\n  \"ownerId\":\"40000000-0000-0000-0000-000000000000\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -846,7 +867,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5100/banking/owners/40000000-0000-0000-0000-000000000000/accountsrs",
+							"raw": "http://localhost:5100/banking/owners/40000000-0000-0000-0000-000000000000/accounts",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -856,7 +877,7 @@
 								"banking",
 								"owners",
 								"40000000-0000-0000-0000-000000000000",
-								"accountsrs"
+								"accounts"
 							]
 						}
 					},
@@ -909,7 +930,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5100/banking/accounts/02000000-0000-0000-0000-000000000000",
+							"raw": "http://localhost:5100/banking/owners/10000000-0000-0000-0000-000000000000/accounts/02000000-0000-0000-0000-000000000000",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -917,8 +938,106 @@
 							"port": "5100",
 							"path": [
 								"banking",
+								"owners",
+								"10000000-0000-0000-0000-000000000000",
 								"accounts",
 								"02000000-0000-0000-0000-000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete account3",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"10000000-0000-0000-0000-000000000000\",\r\n  \"name\": \"Erika Meier\",\r\n  \"birthdate\": \"1980-03-15T00:00:00\",\r\n  \"email\": \"e.meier@icloud.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5100/banking/owners/20000000-0000-0000-0000-000000000000/accounts/03000000-0000-0000-0000-000000000000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"banking",
+								"owners",
+								"20000000-0000-0000-0000-000000000000",
+								"accounts",
+								"03000000-0000-0000-0000-000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete account4",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"10000000-0000-0000-0000-000000000000\",\r\n  \"name\": \"Erika Meier\",\r\n  \"birthdate\": \"1980-03-15T00:00:00\",\r\n  \"email\": \"e.meier@icloud.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5100/banking/owners/30000000-0000-0000-0000-000000000000/accounts/04000000-0000-0000-0000-000000000000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"banking",
+								"owners",
+								"30000000-0000-0000-0000-000000000000",
+								"accounts",
+								"04000000-0000-0000-0000-000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete account5",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"10000000-0000-0000-0000-000000000000\",\r\n  \"name\": \"Erika Meier\",\r\n  \"birthdate\": \"1980-03-15T00:00:00\",\r\n  \"email\": \"e.meier@icloud.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5100/banking/owners/40000000-0000-0000-0000-000000000000/accounts/05000000-0000-0000-0000-000000000000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"banking",
+								"owners",
+								"40000000-0000-0000-0000-000000000000",
+								"accounts",
+								"05000000-0000-0000-0000-000000000000"
 							]
 						}
 					},

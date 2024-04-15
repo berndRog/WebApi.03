@@ -1,13 +1,14 @@
 using System;
 using WebApi.Core.DomainModel.NullEntities;
+using WebApi.Core.Dto;
 namespace WebApi.Core.DomainModel.Entities;
 
 public class Account: AEntity {
    
    #region properties
-   public override Guid Id { get; init; } = Guid.Empty;
-   public string  Iban     { get; init; } = string.Empty;
-   public double  Balance  { get;  set; } = 0;
+   public override Guid Id { get; init; } = Guid.NewGuid();
+   public string Iban { get; init; } = string.Empty;
+   public double  Balance  { get; set; }
    
    // Navigation property
    public Owner Owner   { get; set; } = NullOwner.Instance;
@@ -16,12 +17,26 @@ public class Account: AEntity {
    
    #region ctor
    public Account() {
-      if (Iban.StartsWith("DE") && Iban.Length >= 11) return;
+      Iban = CheckIban(Iban);
+   }
+   public Account(AccountDto dto) {
+      Id = dto.Id;
+      Iban = CheckIban(dto.Iban);
+      Balance = dto.Balance;
+      OwnerId = dto.OwnerId;
+   }
+   #endregion
+
+   #region methods
+   private string CheckIban(string iban) {
+      if (iban.Length >= 8) 
+         return iban;
       var random = new Random();
-      Iban = "DE" +
+      var newIban = "DE" +
          random.Next(10, 99).ToString() +
          random.Next(10000000, 99999999).ToString() +
          random.Next(10000000, 99999999).ToString();
+      return newIban;
    }
    #endregion
    

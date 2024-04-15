@@ -53,14 +53,14 @@ public class OwnersController(
    // Get owners by name as Dto
    // http://localhost:5100/banking/owners/name?name=abc
    [HttpGet("name")]
-   public ActionResult<IEnumerable<OwnerDto>> GetOwnersByName(
+   public ActionResult<OwnerDto> GetOwnerByName(
       [FromQuery] string name
    ) {
-      logger.LogDebug("GetOwnersByName() name={name}", name);
+      logger.LogDebug("GetOwnerByName() name={name}", name);
 
-      return repository.SelectByName(name) switch {
+      return repository.FindByName(name) switch {
          // return owners as Dtos
-         { } owners => Ok(mapper.Map<IEnumerable<OwnerDto>>(owners)),
+         { } owner => Ok(mapper.Map<OwnerDto>(owner)),
          // return Not Found
          null => NotFound("Owners with given name not found")
       };

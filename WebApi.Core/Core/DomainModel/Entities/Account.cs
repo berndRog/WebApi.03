@@ -14,4 +14,15 @@ public class Account: AEntity {
    public Guid  OwnerId { get; set; } = NullOwner.Instance.Id;
    #endregion
    
+   #region ctor
+   public Account() {
+      if (Iban.StartsWith("DE") && Iban.Length >= 11) return;
+      var random = new Random();
+      Iban = "DE" +
+         random.Next(10, 99).ToString() +
+         random.Next(10000000, 99999999).ToString() +
+         random.Next(10000000, 99999999).ToString();
+   }
+   #endregion
+   
 }

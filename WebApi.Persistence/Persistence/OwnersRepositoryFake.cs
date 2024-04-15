@@ -31,10 +31,9 @@ internal class OwnersRepositoryFake(
    public void Remove(Owner owner) =>
       dataContext.Owners.Remove(owner.Id);
 
-   public IEnumerable<Owner> SelectByName(string name) =>
+   public Owner? FindByName(string name) =>
       dataContext.Owners.Values
-         .Where(owner => owner.Name.Contains(name))
-         .ToList();
+         .FirstOrDefault(owner => owner.Name == name);
 
    public Owner? FindByEmail(string email) =>
       dataContext.Owners.Values
